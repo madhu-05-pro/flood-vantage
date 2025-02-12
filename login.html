@@ -86,7 +86,7 @@
         </div>
         <h2>Login</h2>
         
-        <button onclick="netlifyIdentity.open()" class="btn">Login with Netlify</button>
+        <button id="login-btn" class="btn">Login with Netlify</button>
 
         <div class="links">
             <p>Don't have an account? <a href="register.html">Register here</a></p>
@@ -98,17 +98,26 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            if (netlifyIdentity) {
-                netlifyIdentity.on("login", (user) => {
-                    console.log("User logged in:", user);
-                    window.location.href = "dashboard.html"; // Redirect after login
-                });
-
-                netlifyIdentity.on("logout", () => {
-                    console.log("User logged out");
-                    window.location.href = "home.html"; // Redirect after logout
-                });
+            if (!window.netlifyIdentity) {
+                console.error("Netlify Identity is not loaded.");
+                return;
             }
+
+            // Open login modal when button is clicked
+            document.getElementById("login-btn").addEventListener("click", function () {
+                netlifyIdentity.open();
+            });
+
+            // Check login status and redirect after login
+            netlifyIdentity.on("login", (user) => {
+                console.log("User logged in:", user);
+                window.location.href = "index.html"; // Redirect to About Us page
+            });
+
+            netlifyIdentity.on("logout", () => {
+                console.log("User logged out");
+                window.location.href = "home.html"; // Redirect after logout
+            });
         });
     </script>
 
